@@ -1,4 +1,4 @@
-app = "Exa"
+app = "exa"
 primary_region = "iad"
 
 [build]
