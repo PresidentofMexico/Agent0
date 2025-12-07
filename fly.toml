@@ -1,4 +1,4 @@
-app = "exa" # <--- MAKE THIS UNIQUE
+# app = "generated-by-fly" # App name managed by Fly.io UI
 primary_region = "iad"
 [build]
   dockerfile = "Dockerfile"
