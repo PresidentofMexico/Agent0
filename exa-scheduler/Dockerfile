@@ -13,13 +13,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements/pyproject
-COPY pyproject.toml .
+COPY exa-scheduler/pyproject.toml .
 # Install manually or use pip install . if setup
 RUN pip install --no-cache-dir .
 
 # Copy source
-COPY src/ src/
-COPY config/ config/
+COPY exa-scheduler/src/ src/
+COPY exa-scheduler/config/ config/
 
 # Expose port
 EXPOSE 8000
