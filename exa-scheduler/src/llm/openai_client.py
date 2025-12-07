@@ -1,4 +1,5 @@
 import os
+import json
 from typing import List, Dict, Any, Optional
 from openai import AsyncOpenAI
 from dotenv import load_dotenv
@@ -11,16 +12,28 @@ class OpenAIClient:
         self.model = model
         self.history: List[Dict[str, Any]] = []
 
-    def add_message(self, role: str, content: str):
-        """Adds a message to the history."""
-        self.history.append({"role": role, "content": content})
+    def add_message(self, role: str, content: Optional[str], tool_call_id: Optional[str] = None):
+        """
+        Adds a message to the history. 
+        Supports tool_call_id for tool outputs.
+        """
+        message = {"role": role, "content": content}
+        if tool_call_id:
+            message["tool_call_id"] = tool_call_id
+        
+        self.history.append(message)
 
-    async def chat(self, user_input: str, tools: Optional[List[Dict[str, Any]]] = None) -> Any:
+    async def chat(self, user_input: Optional[str] = None, tools: Optional[List[Dict[str, Any]]] = None) -> Any:
         """
         Sends a message to the LLM and gets a response.
-        Manages history automatically.
+        
+        Args:
+            user_input: The text from the user. If None, we assume the history 
+                        is already primed (e.g., with tool outputs) and just want a completion.
+            tools: List of tool schemas.
         """
-        self.add_message("user", user_input)
+        if user_input:
+            self.add_message("user", user_input)
 
         response = await self.client.chat.completions.create(
             model=self.model,
@@ -30,8 +43,8 @@ class OpenAIClient:
 
         message = response.choices[0].message
         
-        # We need to convert the message to a dict to store it in history
-        # simpler way using model_dump if available or just manual
+        # Store assistant response in history
+        # We handle tool_calls specially to ensure they are serialized correctly
         message_dict = {
             "role": message.role,
             "content": message.content
