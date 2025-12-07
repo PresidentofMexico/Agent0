@@ -1,4 +1,4 @@
-# app = "generated-by-fly" # App name managed by Fly.io UI
+app = "exa"
 primary_region = "iad"
 [build]
   dockerfile = "Dockerfile"
