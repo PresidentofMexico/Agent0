@@ -7,17 +7,25 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Install system deps (build-essential is often needed for python packages)
+# Install system deps (build-essential + curl for poetry)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements/pyproject
+# Install Poetry
+RUN curl -sSL https://install.python-poetry.org | python3 -
+ENV PATH="/root/.local/bin:$PATH"
+
+# Copy requirements
 COPY exa-scheduler/pyproject.toml .
+# COPY exa-scheduler/poetry.lock . # Uncomment if you have a lock file
 
 # Install dependencies
-# We verify the pyproject.toml matches the python version here
-RUN pip install --no-cache-dir .
+# --no-root: Skips installing the project itself (fixes the "No file/folder" error)
+# --only main: Skips dev dependencies
+RUN poetry config virtualenvs.create false \
+    && poetry install --no-root --only main
 
 # Copy source code
 COPY exa-scheduler/src/ src/
