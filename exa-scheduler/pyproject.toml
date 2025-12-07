@@ -13,6 +13,7 @@ tenacity = "^8.0.0"        # Retry logic
 python-dotenv = "^1.0.0"   # Environment variable management
 fastapi = "^0.100.0"       # Web framework for API
 uvicorn = "^0.23.0"        # ASGI server
+pydantic-settings = "^2.0.0" # Configuration management
 
 [build-system]
 requires = ["poetry-core"]
