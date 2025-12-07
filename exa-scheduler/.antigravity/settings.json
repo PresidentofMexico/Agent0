@@ -1,0 +1,5 @@
+{
+    "workspace_settings": {
+        "python.defaultInterpreterPath": ".venv/bin/python"
+    }
+}

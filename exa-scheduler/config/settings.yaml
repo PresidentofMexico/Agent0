@@ -1,0 +1,6 @@
+# Global configuration
+timeouts:
+  default: 30
+
+model_selection:
+  default: "gpt-4o"

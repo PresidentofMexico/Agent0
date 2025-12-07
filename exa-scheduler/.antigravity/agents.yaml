@@ -1,0 +1,6 @@
+# Define local dev agents
+agents:
+  - name: RefactorAgent
+    description: Specializes in refactoring code
+  - name: TestAgent
+    description: Writes and runs tests
