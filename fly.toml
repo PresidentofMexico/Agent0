@@ -1,4 +1,4 @@
-app = "exa"
+# app = "managed-by-fly-ui" 
 primary_region = "iad"
 [build]
   dockerfile = "Dockerfile"
