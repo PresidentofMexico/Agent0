@@ -1,21 +1,21 @@
-app = "exa"
-primary_region = "iad"
+# fly.toml app configuration file generated for exa on 2025-12-07T15:40:39Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
-[build]
-  dockerfile = "exa-scheduler/Dockerfile"
-
-[env]
-  PORT = "8000"
-  LOG_LEVEL = "INFO"
-
-[mounts]
-  source = "exa_data_vol"
-  destination = "/app/data"
+app = 'exa'
+primary_region = 'iad'
 
 [http_service]
   internal_port = 8000
   force_https = true
-  auto_stop_machines = true
+  auto_stop_machines = 'stop'
   auto_start_machines = true
-  min_machines_running = 1
-  processes = ["app"]
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 1024
