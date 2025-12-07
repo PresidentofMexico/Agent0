@@ -1,0 +1,4 @@
+[2025-12-07T08:32:33.274065] TO: test@example.com | SUBJECT: Test | BODY: Hello
+[2025-12-07T08:59:43.068135] TO: me@test.com | SUBJECT: Hi | BODY: Test body
+[2025-12-07T09:00:03.534204] TO: me@test.com | SUBJECT: Hi | BODY: Test body
+[2025-12-07T09:00:19.765183] TO: me@test.com | SUBJECT: Hi | BODY: Test body

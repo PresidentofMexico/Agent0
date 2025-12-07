@@ -15,12 +15,14 @@ class OpenAIClient:
         """Adds a message to the history."""
         self.history.append({"role": role, "content": content})
 
-    async def chat(self, user_input: str, tools: Optional[List[Dict[str, Any]]] = None) -> Any:
+    async def chat(self, user_input: Optional[str] = None, tools: Optional[List[Dict[str, Any]]] = None) -> Any:
         """
         Sends a message to the LLM and gets a response.
         Manages history automatically.
+        If user_input is None, it assumes the history alone is sufficient (e.g., after tool outputs).
         """
-        self.add_message("user", user_input)
+        if user_input:
+            self.add_message("user", user_input)
 
         response = await self.client.chat.completions.create(
             model=self.model,

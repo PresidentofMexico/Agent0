@@ -11,6 +11,8 @@ pydantic = "^2.0.0"        # Type validation & schema generation
 chromadb = "^0.4.0"        # Local vector memory
 tenacity = "^8.0.0"        # Retry logic
 python-dotenv = "^1.0.0"   # Environment variable management
+fastapi = "^0.100.0"       # Web framework for API
+uvicorn = "^0.23.0"        # ASGI server
 
 [build-system]
 requires = ["poetry-core"]

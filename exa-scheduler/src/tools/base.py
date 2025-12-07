@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Type
+from typing import Any, Dict, Type, Optional, ClassVar
 from pydantic import BaseModel, ConfigDict
 from pydantic.json_schema import models_json_schema
 
@@ -12,6 +12,7 @@ class BaseTool(BaseModel, ABC):
     
     name: str
     description: str
+    args_model: ClassVar[Optional[Type[BaseModel]]] = None
 
     @abstractmethod
     def run(self, **kwargs) -> Any:
@@ -24,28 +25,30 @@ class BaseTool(BaseModel, ABC):
     def to_openai_schema(cls) -> Dict[str, Any]:
         """
         Generates the JSON schema for this tool formatted for OpenAI's API.
-        This strips out the 'run' method and other internal fields, focusing on
-        the arguments required by the tool.
         """
-        # We need the schema of the inputs, which might be the model itself
-        # excluding 'name' and 'description' if they are just metadata,
-        # but for simplicity, let's assume the tool arguments are defined as fields 
-        # on the subclass.
+        schema_src = cls
+        parameters = {}
         
-        properties = cls.model_json_schema().get("properties", {})
-        
-        # Remove metadata fields from the parameters schema
-        if "name" in properties:
-            del properties["name"]
-        if "description" in properties:
-            del properties["description"]
-
-        # Create the parameters object
-        parameters = {
-            "type": "object",
-            "properties": properties,
-            "required": [k for k in properties.keys()] # Assume all remaining fields are arguments
-        }
+        # Check if the class has an 'args_model' ClassVar set
+        if cls.args_model is not None:
+            schema_src = cls.args_model
+            properties = schema_src.model_json_schema().get("properties", {})
+            parameters = {
+                "type": "object",
+                "properties": properties,
+                "required": list(properties.keys())
+            }
+        else:
+            # Fallback to current behavior: Schema of the tool itself minus metadata
+            properties = cls.model_json_schema().get("properties", {})
+            if "name" in properties: del properties["name"]
+            if "description" in properties: del properties["description"]
+            
+            parameters = {
+                "type": "object",
+                "properties": properties,
+                "required": list(properties.keys())
+            }
         
         return {
             "type": "function",
