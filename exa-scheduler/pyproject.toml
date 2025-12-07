@@ -14,6 +14,8 @@ python-dotenv = "^1.0.0"   # Environment variable management
 fastapi = "^0.100.0"       # Web framework for API
 uvicorn = "^0.23.0"        # ASGI server
 pydantic-settings = "^2.0.0" # Configuration management
+# Pin numpy to <2.0.0 because chromadb is not yet compatible with numpy 2.0
+numpy = "<2.0.0"
 
 [build-system]
 requires = ["poetry-core"]
