@@ -35,8 +35,10 @@ COPY exa-scheduler/config/ config/
 EXPOSE 8000
 
 # Create user for security
-RUN useradd -m appuser && chown -R appuser /app
-USER appuser
+# NOTE: Commented out to fix Fly.io volume permission issues. 
+# Fly volumes are owned by root, so the app needs to run as root to write to /app/data.
+# RUN useradd -m appuser && chown -R appuser /app
+# USER appuser
 
 # CMD
 CMD ["uvicorn", "src.server:app", "--host", "0.0.0.0", "--port", "8000"]
